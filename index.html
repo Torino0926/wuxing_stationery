@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>薄荷文具局 · 八字五行择物</title>
+<style>
+/* ==========================================================
+   薄荷雾岛风 · Mint Fog Island
+   背景 #EAF6E8 → #E8C7D1 / 卡片纯白 / 文字 #536F65 / 按钮 #91CBB8
+   ========================================================== */
+:root {
+  --mint-bg-a: #EAF6E8;
+  --mint-bg-b: #E8C7D1;
+  --ink: #536F65;
+  --ink-80: rgba(83,111,101,0.80);
+  --ink-60: rgba(83,111,101,0.60);
+  --ink-40: rgba(83,111,101,0.40);
+  --ink-16: rgba(83,111,101,0.16);
+  --ink-08: rgba(83,111,101,0.08);
+  --btn: #91CBB8;
+  --btn-dark: #7BBCA7;
+  --card: #FFFFFF;
+  --shadow-sm: 0 4px 18px rgba(83,111,101,0.07);
+  --shadow-md: 0 10px 36px rgba(83,111,101,0.10);
+  --shadow-lg: 0 18px 60px rgba(83,111,101,0.14);
+  --radius: 20px;
+  --radius-sm: 14px;
+
+  /* 五行 · 薄荷化柔彩 */
+  --el-wood:  #7FB89B;
+  --el-fire:  #E79FA8;
+  --el-earth: #D2B183;
+  --el-metal: #9FB3C6;
+  --el-water: #86AEC4;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: var(--ink);
+  background: linear-gradient(160deg, #EAF6E8 0%, #EAF6E8 35%, #E8C7D1 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.65;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 雾岛光斑 */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+}
+body::before {
+  width: 420px; height: 420px;
+  top: -140px; left: -120px;
+  background: radial-gradient(circle, rgba(145,203,184,0.30), transparent 70%);
+}
+body::after {
+  width: 480px; height: 480px;
+  bottom: -180px; right: -160px;
+  background: radial-gradient(circle, rgba(232,199,209,0.55), transparent 70%);
+}
+
+/* ===== 布局 ===== */
+.app {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 44px 20px 72px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 顶部标题 ===== */
+.hero {
+  text-align: center;
+  margin-bottom: 34px;
+  animation: rise .9s cubic-bezier(.22,.61,.36,1) both;
+}
+.hero-mark {
+  width: 62px; height: 62px;
+  margin: 0 auto 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.72);
+  box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 27px;
+  color: var(--ink);
+  backdrop-filter: blur(6px);
+}
+.hero h1 {
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+.hero p {
+  font-size: 12.5px;
+  letter-spacing: 2.5px;
+  color: var(--ink-60);
+  font-weight: 400;
+}
+
+/* ===== 卡片 ===== */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 34px 30px;
+  margin-bottom: 20px;
+  animation: rise .8s cubic-bezier(.22,.61,.36,1) both;
+}
+
+/* ===== 进度条 ===== */
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+.progress-track {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--ink-08);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  background: var(--btn);
+  transition: width .55s cubic-bezier(.22,.61,.36,1);
+}
+.progress-text {
+  font-size: 11.5px;
+  letter-spacing: 1.5px;
+  color: var(--ink-40);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 问题 ===== */
+.q-index {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--btn-dark);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.q-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.q-sub {
+  font-size: 12.5px;
+  color: var(--ink-40);
+  margin-bottom: 24px;
+  letter-spacing: .5px;
+}
+
+/* ===== 选项 ===== */
+.options { display: flex; flex-direction: column; gap: 11px; }
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--ink-08);
+  background: #FCFDFC;
+  cursor: pointer;
+  transition: all .28s cubic-bezier(.22,.61,.36,1);
+  user-select: none;
+}
+.option:hover {
+  border-color: rgba(145,203,184,0.65);
+  background: #F7FCFA;
+  transform: translateX(3px);
+}
+.option.active {
+  border-color: var(--btn);
+  background: rgba(145,203,184,0.10);
+  box-shadow: 0 4px 16px rgba(145,203,184,0.20);
+}
+.option-dot {
+  flex: 0 0 auto;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-16);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .28s;
+  position: relative;
+}
+.option.active .option-dot {
+  border-color: var(--btn);
+  background: var(--btn);
+}
+.option.active .option-dot::after {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #fff;
+}
+.option-body { flex: 1; min-width: 0; }
+.option-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: .5px;
+}
+.option-desc {
+  font-size: 11.5px;
+  color: var(--ink-40);
+  margin-top: 2px;
+  letter-spacing: .3px;
+}
+.option-el {
+  flex: 0 0 auto;
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  color: var(--ink-40);
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--ink-08);
+}
+
+/* ===== 按钮 ===== */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 999px;
+  background: var(--btn);
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .3s cubic-bezier(.22,.61,.36,1);
+  box-shadow: 0 6px 20px rgba(145,203,184,0.35);
+}
+.btn:hover:not(:disabled) {
+  background: var(--btn-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(145,203,184,0.42);
+}
+.btn:active:not(:disabled) { transform: translateY(0) scale(.99); }
+.btn:disabled {
+  background: #D8E6E0;
+  color: rgba(255,255,255,0.85);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-60);
+  box-shadow: none;
+  border: 1.5px solid var(--ink-16);
+  letter-spacing: 2px;
+  font-size: 13.5px;
+  padding: 13px;
+  margin-top: 12px;
+}
+.btn-ghost:hover {
+  background: var(--ink-08) !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* ===== 表单 ===== */
+.field { margin-bottom: 18px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--ink-60);
+  margin-bottom: 9px;
+  font-weight: 500;
+}
+.field input,
+.field select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--ink-08);
+  border-radius: var(--radius-sm);
+  background: #FCFDFC;
+  font-size: 15.5px;
+  color: var(--ink);
+  font-family: inherit;
+  transition: all .25s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.field select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23536F65' fill-opacity='.45' d='M1 1.5L6 6.5L11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--btn);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(145,203,184,0.14);
+}
+.field-row { display: flex; gap: 12px; }
+.field-row .field { flex: 1; }
+
+/* ===== 结果 · 四柱 ===== */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+  margin-bottom: 26px;
+}
+.pillar {
+  background: #FCFDFC;
+  border: 1.5px solid var(--ink-08);
+  border-radius: var(--radius-sm);
+  padding: 16px 6px 13px;
+  text-align: center;
+  transition: all .3s;
+}
+.pillar:hover {
+  border-color: rgba(145,203,184,0.5);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+.pillar-name {
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--ink-40);
+  margin-bottom: 9px;
+}
+.pillar-char {
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+.pillar-el {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--ink-40);
+  margin-top: 5px;
+}
+.el-wood  { color: var(--el-wood); }
+.el-fire  { color: var(--el-fire); }
+.el-earth { color: var(--el-earth); }
+.el-metal { color: var(--el-metal); }
+.el-water { color: var(--el-water); }
+
+/* ===== 五行条 ===== */
+.section-label {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--ink-40);
+  margin-bottom: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--ink-08);
+}
+
+.bars { display: flex; gap: 10px; margin-bottom: 8px; }
+.bar-item { flex: 1; text-align: center; }
+.bar-track {
+  height: 92px;
+  background: var(--ink-08);
+  border-radius: 9px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  width: 100%;
+  height: 0%;
+  border-radius: 9px;
+  transition: height .9s cubic-bezier(.22,.61,.36,1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 5px;
+  font-size: 10.5px;
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.bar-fill.wood  { background: var(--el-wood); }
+.bar-fill.fire  { background: var(--el-fire); }
+.bar-fill.earth { background: var(--el-earth); }
+.bar-fill.metal { background: var(--el-metal); }
+.bar-fill.water { background: var(--el-water); }
+.bar-name {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--ink-60);
+  margin-top: 8px;
+}
+
+/* ===== 喜忌 ===== */
+.xiji {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.xiji-cell {
+  flex: 1;
+  border-radius: var(--radius-sm);
+  padding: 15px 12px;
+  text-align: center;
+}
+.xiji-cell.good {
+  background: rgba(145,203,184,0.13);
+}
+.xiji-cell.bad {
+  background: rgba(231,159,168,0.13);
+}
+.xiji-cell .k {
+  font-size: 10.5px;
+  letter-spacing: 2px;
+  color: var(--ink-40);
+  margin-bottom: 5px;
+}
+.xiji-cell .v {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 4px;
+}
+.xiji-cell.good .v { color: #5FAE96; }
+.xiji-cell.bad  .v { color: #D98590; }
+
+.summary {
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--ink-80);
+  letter-spacing: .3px;
+}
+.summary b { color: var(--ink); font-weight: 600; }
+
+/* ===== 推荐卡片 ===== */
+.picks { display: flex; flex-direction: column; gap: 13px; }
+
+.pick {
+  display: flex;
+  gap: 16px;
+  padding: 20px 18px;
+  border-radius: var(--radius-sm);
+  background: #FCFDFC;
+  border: 1.5px solid var(--ink-08);
+  transition: all .3s cubic-bezier(.22,.61,.36,1);
+  position: relative;
+  overflow: hidden;
+}
+.pick:hover {
+  border-color: rgba(145,203,184,0.55);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+.pick-rank {
+  position: absolute;
+  top: 0; right: 0;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #fff;
+  background: var(--btn);
+  padding: 3px 11px;
+  border-radius: 0 var(--radius-sm) 0 11px;
+}
+.pick-el {
+  flex: 0 0 auto;
+  width: 52px; height: 52px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0;
+}
+.pick-el.wood  { background: var(--el-wood); }
+.pick-el.fire  { background: var(--el-fire); }
+.pick-el.earth { background: var(--el-earth); }
+.pick-el.metal { background: var(--el-metal); }
+.pick-el.water { background: var(--el-water); }
+
+.pick-body { flex: 1; min-width: 0; }
+.pick-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.pick-name {
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: .3px;
+}
+.pick-tag {
+  font-size: 10px;
+  letter-spacing: .5px;
+  color: var(--ink-40);
+  background: var(--ink-08);
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.pick-desc {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--ink-60);
+  margin-bottom: 8px;
+}
+.pick-why {
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: #5FAE96;
+  background: rgba(145,203,184,0.10);
+  padding: 7px 11px;
+  border-radius: 9px;
+  letter-spacing: .2px;
+}
+
+/* ===== 页脚 ===== */
+.foot {
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-40);
+  line-height: 1.9;
+  letter-spacing: .5px;
+  margin-top: 30px;
+  padding: 0 10px;
+}
+
+/* ===== 动画 ===== */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hidden { display: none !important; }
+
+.fade-in { animation: rise .55s cubic-bezier(.22,.61,.36,1) both; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 560px) {
+  .app { padding: 30px 15px 56px; }
+  .card { padding: 26px 20px; border-radius: 18px; }
+  .hero h1 { font-size: 21px; letter-spacing: 2px; }
+  .hero p { font-size: 11px; letter-spacing: 1.5px; }
+  .hero-mark { width: 54px; height: 54px; font-size: 23px; }
+  .q-title { font-size: 17.5px; }
+  .option { padding: 14px 15px; gap: 12px; }
+  .option-label { font-size: 14px; }
+  .option-el { display: none; }
+  .pillar-char { font-size: 21px; }
+  .pillar { padding: 13px 4px 11px; }
+  .pillars { gap: 7px; }
+  .pick { padding: 17px 15px; gap: 13px; }
+  .pick-el { width: 44px; height: 44px; font-size: 16px; border-radius: 13px; }
+  .pick-name { font-size: 14.5px; }
+  .xiji-cell .v { font-size: 15px; letter-spacing: 3px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- 标题 -->
+  <div class="hero">
+    <div class="hero-mark">◍</div>
+    <h1>薄荷文具局</h1>
+    <p>八字五行 · 为你择一物</p>
+  </div>
+
+  <!-- ========== 步骤一：开始 ========== -->
+  <section id="screenStart" class="card">
+    <div class="q-title" style="text-align:center; margin-bottom:12px;">先聊聊你</div>
+    <p class="q-sub" style="text-align:center; margin-bottom:26px;">
+      三个小问题，加上你的出生时间<br>
+      从 300+ 款平价好物里，挑出真正适合你的三件
+    </p>
+    <button class="btn" id="btnStart">开 始</button>
+  </section>
+
+  <!-- ========== 步骤二：问卷 ========== -->
+  <section id="screenQuiz" class="card hidden">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">1 / 3</div>
+    </div>
+    <div id="quizBody"></div>
+  </section>
+
+  <!-- ========== 步骤三：生辰 ========== -->
+  <section id="screenBirth" class="card hidden">
+    <div class="q-index">最后一步</div>
+    <div class="q-title">你的出生时间</div>
+    <p class="q-sub">用于排出四柱八字，判断五行喜忌</p>
+
+    <div class="field">
+      <label>出生日期（公历）</label>
+      <input type="date" id="birthDate" min="1900-01-01" max="2099-12-31" value="1995-08-15">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>出生时辰</label>
+        <select id="birthHour">
+          <option value="">不确定</option>
+          <option value="0">子时 23:00–01:00</option>
+          <option value="1">丑时 01:00–03:00</option>
+          <option value="3">寅时 03:00–05:00</option>
+          <option value="5">卯时 05:00–07:00</option>
+          <option value="7">辰时 07:00–09:00</option>
+          <option value="9">巳时 09:00–11:00</option>
+          <option value="11">午时 11:00–13:00</option>
+          <option value="13">未时 13:00–15:00</option>
+          <option value="15">申时 15:00–17:00</option>
+          <option value="17">酉时 17:00–19:00</option>
+          <option value="19">戌时 19:00–21:00</option>
+          <option value="21">亥时 21:00–23:00</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>性别</label>
+        <select id="birthSex">
+          <option value="male">男</option>
+          <option value="female">女</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn" id="btnCalc" style="margin-top:14px;">开 始 测 算</button>
+    <button class="btn btn-ghost" id="btnBackQuiz">返回修改问卷</button>
+  </section>
+
+  <!-- ========== 步骤四：结果 ========== -->
+  <section id="screenResult" class="hidden">
+
+    <div class="card fade-in">
+      <div class="section-label">四柱八字</div>
+      <div class="pillars" id="pillars"></div>
+
+      <div class="section-label">五行分布</div>
+      <div class="bars" id="bars"></div>
+
+      <div class="xiji">
+        <div class="xiji-cell good">
+          <div class="k">喜 用</div>
+          <div class="v" id="favorText">—</div>
+        </div>
+        <div class="xiji-cell bad">
+          <div class="k">忌 神</div>
+          <div class="v" id="disfavorText">—</div>
+        </div>
+      </div>
+
+      <div class="summary" id="summary"></div>
+    </div>
+
+    <div class="card fade-in" style="animation-delay:.08s">
+      <div class="section-label">为你择三物</div>
+      <div class="picks" id="picks"></div>
+      <button class="btn btn-ghost" id="btnRestart" style="margin-top:20px;">重 新 测 算</button>
+    </div>
+
+  </section>
+
+  <div class="foot">
+    仅供传统文化学习与娱乐参考，不构成任何决策依据<br>
+    排盘逻辑参考开源项目 jinchenma94/bazi-skill
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   PART 1 · 八字排盘核心算法
+   参考 github.com/jinchenma94/bazi-skill (scripts/pai_pan.py)
+   ============================================================ */
+
+const GAN = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const ZHI = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const GAN_WUXING = ['木','木','火','火','土','土','金','金','水','水'];
+const ZHI_WUXING = ['水','土','木','木','土','火','火','土','金','金','土','水'];
+
+/* 地支藏干：本气 / 中气 / 余气 */
+const CANGGAN = {
+  '子': [['癸','水']],
+  '丑': [['己','土'],['癸','水'],['辛','金']],
+  '寅': [['甲','木'],['丙','火'],['戊','土']],
+  '卯': [['乙','木']],
+  '辰': [['戊','土'],['乙','木'],['癸','水']],
+  '巳': [['丙','火'],['庚','金'],['戊','土']],
+  '午': [['丁','火'],['己','土']],
+  '未': [['己','土'],['丁','火'],['乙','木']],
+  '申': [['庚','金'],['壬','水'],['戊','土']],
+  '酉': [['辛','金']],
+  '戌': [['戊','土'],['辛','金'],['丁','火']],
+  '亥': [['壬','水'],['甲','木']]
+};
+/* 藏干力量权重：本气 60% / 中气 30% / 余气 10% */
+const CANGGAN_WEIGHT = [0.6, 0.3, 0.1];
+
+/* 年上起月：年干 → 寅月天干起始索引 */
+const YUE_GAN_YIN = {0:2, 5:2, 1:4, 6:4, 2:6, 7:6, 3:8, 8:8, 4:0, 9:0};
+/* 五鼠遁元：日干 → 子时天干起始索引 */
+const ZI_SHI_GAN = {0:0, 5:0, 1:2, 6:2, 2:4, 7:4, 3:6, 8:6, 4:8, 9:8};
+
+/* 五行相生：木→火→土→金→水→木 */
+const SHENG = {'木':'火','火':'土','土':'金','金':'水','水':'木'};
+/* 五行相克：木→土→水→火→金→木 */
+const KE = {'木':'土','土':'水','水':'火','火':'金','金':'木'};
+
+/* 儒略日数 */
+function jdn(y, m, d) {
+  const a = Math.floor((14 - m) / 12);
+  const yy = y + 4800 - a;
+  const mm = m + 12 * a - 3;
+  return d + Math.floor((153 * mm + 2) / 5) + 365 * yy
+       + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+}
+
+/* 太阳视黄经（Meeus AA 简式） */
+function sunLongitude(jd) {
+  const T = (jd - 2451545.0) / 36525.0;
+  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T * T;
+  const M = 357.52911 + 35999.05029 * T - 0.0001537 * T * T;
+  const Mr = M * Math.PI / 180;
+  const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * Math.sin(Mr)
+          + (0.019993 - 0.000101 * T) * Math.sin(2 * Mr)
+          + 0.000289 * Math.sin(3 * Mr);
+  const omega = 125.04 - 1934.136 * T;
+  const lam = L0 + C - 0.00569 - 0.00478 * Math.sin(omega * Math.PI / 180);
+  return ((lam % 360) + 360) % 360;
+}
+
+function dateToJD(y, m, d) { return jdn(y, m, d) - 0.5; }
+
+/* 在指定年份内查找太阳到达目标黄经的日期 */
+function findSolarTerm(year, targetLon) {
+  let best = null, bestDiff = 999;
+  const start = new Date(year, 0, 1);
+  for (let i = 0; i < 366; i++) {
+    const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+    if (d.getFullYear() !== year) break;
+    const jd = dateToJD(d.getFullYear(), d.getMonth() + 1, d.getDate());
+    const lon = sunLongitude(jd);
+    let diff = Math.abs(lon - targetLon);
+    if (diff > 180) diff = 360 - diff;
+    if (diff < bestDiff) { bestDiff = diff; best = d; }
+  }
+  return best;
+}
+
+/* 十二节（黄经, 名称, 对应月支索引） */
+const JIE_DEFS = [
+  [315,'立春',2], [345,'惊蛰',3], [15,'清明',4],  [45,'立夏',5],
+  [75,'芒种',6],  [105,'小暑',7], [135,'立秋',8], [165,'白露',9],
+  [195,'寒露',10],[225,'立冬',11],[255,'大雪',0], [285,'小寒',1]
+];
+
+/* 收集三年范围内的节气事件，按时间排序 */
+function getJieEvents(year) {
+  const out = [];
+  for (let y = year - 1; y <= year + 1; y++) {
+    for (const [lon, name, zi] of JIE_DEFS) {
+      out.push({ date: findSolarTerm(y, lon), name: name, zhiIndex: zi });
+    }
+  }
+  out.sort(function (a, b) { return a.date - b.date; });
+  return out;
+}
+
+function gzFromIndex(idx) {
+  idx = ((idx % 60) + 60) % 60;
+  return { gan: GAN[idx % 10], zhi: ZHI[idx % 12], ganIndex: idx % 10, zhiIndex: idx % 12 };
+}
+
+/* 年柱：立春分年 */
+function resolveYear(year, month, day, hour) {
+  const lichun = findSolarTerm(year, 315);
+  const birth = new Date(year, month - 1, day, hour === null ? 12 : hour);
+  const yearNum = birth < lichun ? year - 1 : year;
+  const gz = gzFromIndex((yearNum - 4) % 60);
+  return { yearNum: yearNum, gan: gz.gan, zhi: gz.zhi,
+           ganIndex: gz.ganIndex, zhiIndex: gz.zhiIndex };
+}
+
+/* 月柱：十二节分月 + 年上起月 */
+function resolveMonth(year, month, day, hour, yearGanIndex) {
+  const birth = new Date(year, month - 1, day, hour === null ? 12 : hour);
+  const events = getJieEvents(year);
+  let cur = events[0];
+  for (let i = 0; i < events.length; i++) {
+    if (events[i].date <= birth) cur = events[i]; else break;
+  }
+  const zi = cur.zhiIndex;
+  const step = ((zi - 2) % 12 + 12) % 12;
+  const gi = (YUE_GAN_YIN[yearGanIndex] + step) % 10;
+  return { gan: GAN[gi], zhi: ZHI[zi], ganIndex: gi, zhiIndex: zi, jie: cur.name };
+}
+
+/* 日柱：JDN 推算 + 夜子时日界 */
+function resolveDay(year, month, day, hour) {
+  let uy = year, um = month, ud = day, label = '';
+  if (hour !== null) {
+    if (hour >= 23) {
+      const d = new Date(year, month - 1, day);
+      d.setDate(d.getDate() + 1);
+      uy = d.getFullYear(); um = d.getMonth() + 1; ud = d.getDate();
+      label = '夜子时';
+    } else if (hour === 0) {
+      label = '早子时';
+    }
+  }
+  const idx = ((jdn(uy, um, ud) + 49) % 60 + 60) % 60;
+  const gz = gzFromIndex(idx);
+  return { gan: gz.gan, zhi: gz.zhi, ganIndex: gz.ganIndex,
+           zhiIndex: gz.zhiIndex, ziLabel: label };
+}
+
+/* 钟点 → 时支 */
+function hourToShichen(hour) {
+  if (hour === null) return null;
+  if (hour >= 23 || hour < 1) return '子';
+  return ZHI[Math.floor((hour + 1) / 2) % 12];
+}
+
+/* 时柱：五鼠遁元 */
+function resolveHour(dayGanIndex, shichen) {
+  if (!shichen) return { gan: null, zhi: null, ganIndex: null, zhiIndex: null };
+  const zi = ZHI.indexOf(shichen);
+  const gi = (ZI_SHI_GAN[dayGanIndex] + zi) % 10;
+  return { gan: GAN[gi], zhi: ZHI[zi], ganIndex: gi, zhiIndex: zi };
+}
+
+/* 五行统计（含藏干加权） */
+function countWuxing(list) {
+  const c = { '木':0, '火':0, '土':0, '金':0, '水':0 };
+  for (const p of list) {
+    if (p.gan !== null) c[GAN_WUXING[p.ganIndex]] += 1;
+    if (p.zhi !== null) {
+      const hid = CANGGAN[p.zhi];
+      for (let i = 0; i < hid.length; i++) c[hid[i][1]] += CANGGAN_WEIGHT[i];
+    }
+  }
+  return c;
+}
+
+/* 喜忌判定：帮身 vs 消耗 */
+function analyze(counts, dayGanIndex) {
+  const me = GAN_WUXING[dayGanIndex];
+
+  let shengWo = '';
+  for (const k in SHENG) if (SHENG[k] === me) { shengWo = k; break; }
+  let keWo = '';
+  for (const k in KE) if (KE[k] === me) { keWo = k; break; }
+  const woSheng = SHENG[me];
+  const woKe = KE[me];
+
+  const bang = counts[me] + counts[shengWo];
+  const hao = counts[woSheng] + counts[woKe] + counts[keWo];
+  const strong = bang > hao;
+
+  let favor, disfavor;
+  if (strong) {
+    /* 身强：喜财（我克）、食伤（我生）、官杀（克我） */
+    favor = [woKe, woSheng, keWo];
+    disfavor = [shengWo, me];
+  } else {
+    /* 身弱：喜印（生我）、比劫（同我） */
+    favor = [shengWo, me];
+    disfavor = [woKe, woSheng, keWo];
+  }
+
+  const els = ['木','火','土','金','水'];
+  let weakest = els[0];
+  for (const e of els) if (counts[e] < counts[weakest]) weakest = e;
+
+  return {
+    me: me, dayGan: GAN[dayGanIndex], strong: strong,
+    bang: bang, hao: hao,
+    favor: favor, disfavor: disfavor, weakest: weakest,
+    shengWo: shengWo, woSheng: woSheng, woKe: woKe, keWo: keWo
+  };
+}
+
+/* 完整排盘 */
+function paipan(year, month, day, hour) {
+  const y = resolveYear(year, month, day, hour);
+  const m = resolveMonth(year, month, day, hour, y.ganIndex);
+  const d = resolveDay(year, month, day, hour);
+  const sc = hourToShichen(hour);
+  const h = resolveHour(d.ganIndex, sc);
+
+  const pillars = [
+    { label:'年柱', gan:y.gan, zhi:y.zhi, ganIndex:y.ganIndex, zhiIndex:y.zhiIndex },
+    { label:'月柱', gan:m.gan, zhi:m.zhi, ganIndex:m.ganIndex, zhiIndex:m.zhiIndex },
+    { label:'日柱', gan:d.gan, zhi:d.zhi, ganIndex:d.ganIndex, zhiIndex:d.zhiIndex },
+    { label:'时柱', gan:h.gan, zhi:h.zhi, ganIndex:h.ganIndex, zhiIndex:h.zhiIndex }
+  ];
+
+  const counts = countWuxing(pillars);
+  const xiji = analyze(counts, d.ganIndex);
+  return { pillars: pillars, counts: counts, xiji: xiji, shichen: sc };
+}
+
+
+/* ============================================================
+   PART 2 · 问卷配置
+   ============================================================ */
+
+const QUIZ = [
+  {
+    index: '01',
+    title: '近期最困扰你的是？',
+    sub: '选一个最贴近当下状态的',
+    options: [
+      { label:'学习考运', desc:'备考、论文、上岸压力', el:'金', tags:['考试专用','刷题神器','极细','速干','学习本','替芯'] },
+      { label:'工作财运', desc:'收入、项目、职场进阶', el:'土', tags:['办公款','金属','收纳','量贩','计划本','文件夹'] },
+      { label:'人际桃花', desc:'关系、社交、情感起伏', el:'火', tags:['高颜值','IP联名','彩色','复古色','贴纸','便利贴'] },
+      { label:'情绪内耗', desc:'焦虑、失眠、想得太多', el:'木', tags:['手帐','复古','极简','顺滑','便签','文创'] }
+    ]
+  },
+  {
+    index: '02',
+    title: '喜欢的桌面风格？',
+    sub: '想象一下你理想中的书桌',
+    options: [
+      { label:'极简黑白灰', desc:'干净、克制、零干扰', el:'水', tags:['极简','直液笔','经典款','金属','办公款'] },
+      { label:'日系复古牛皮纸', desc:'温暖、旧书、手作感', el:'土', tags:['牛皮纸','复古','手帐','复古色','软面本'] },
+      { label:'多巴胺马卡龙', desc:'明亮、可爱、有元气', el:'火', tags:['马卡龙','彩色','高颜值','荧光笔','渐变','果冻感'] },
+      { label:'工业金属风', desc:'冷峻、精密、机械感', el:'金', tags:['金属','制图','尺规','极细','自动铅笔'] }
+    ]
+  },
+  {
+    index: '03',
+    title: '你的写字习惯？',
+    sub: '握笔时最在意的手感',
+    options: [
+      { label:'追求顺滑', desc:'一笔到底，越快越好', el:'水', tags:['顺滑','直液笔','走珠','速干','按动'] },
+      { label:'喜欢阻尼感', desc:'有点摩擦，字才立得住', el:'木', tags:['铅笔','素描','绘图','木杆','原木'] },
+      { label:'不断墨不洇纸', desc:'稳定、干净、不出错', el:'金', tags:['速干','考试专用','极细','替芯','经典款'] }
+    ]
+  }
+];
+
+
+/* ============================================================
+   PART 3 · 文具数据库（310 款）
+   五行均衡：水 62 / 木 62 / 金 62 / 火 62 / 土 62
+   ============================================================ */
+
+const stationeryData = [
+
+/* ---------------- 水 · 顺滑 / 速干 / 直液 ---------------- */
+{ name:'白雪 PVR-155 直液式走珠笔', element:'水', type:'直液笔', desc:'一块多一支的国产之光，出水像溪水流过纸面，写到最后一滴都不断。' },
+{ name:'白雪 PVR-150 直液速干', element:'水', type:'速干', desc:'左手党救星，落笔即干，翻页不会糊成一片。' },
+{ name:'白雪 直液式 0.5 黑', element:'水', type:'刷题神器', desc:'一盒十支的价格，够你刷完一整个学期的卷子。' },
+{ name:'白雪 直液式 蓝黑', element:'水', type:'经典配色', desc:'蓝黑是笔记本里最耐看的颜色，写满也不刺眼。' },
+{ name:'点石 DS-904 走珠君', element:'水', type:'走珠', desc:'国产走珠的天花板，滑到你会怀疑纸是不是变光滑了。' },
+{ name:'点石 DS-905 速干走珠', element:'水', type:'速干', desc:'速干加走珠，考试写大题时手速终于跟得上脑子。' },
+{ name:'点石 走珠君 极细', element:'水', type:'极细', desc:'细而不刮纸，适合字小又想写满整页的人。' },
+{ name:'点石 复古走珠', element:'水', type:'复古色', desc:'墨色偏灰调，写在米色纸上像旧信。' },
+{ name:'晨光 K35 优品按动', element:'水', type:'按动', desc:'国民按动笔，班里一半人都在用，闭眼买不会错。' },
+{ name:'晨光 ARP50901 直液', element:'水', type:'直液笔', desc:'晨光的直液代表作，顺滑度和价格的比例让人心安。' },
+{ name:'晨光 AGP68601 速干', element:'水', type:'速干', desc:'速干墨水配软胶握，长时间写字手指不酸。' },
+{ name:'晨光 Q7 经典', element:'水', type:'经典款', desc:'从小学用到工作，这支笔见过你所有的考试。' },
+{ name:'晨光 优品 AGPB', element:'水', type:'性价比', desc:'三块多的价格，写出十块钱的顺滑感。' },
+{ name:'晨光 本味 直液', element:'水', type:'直液笔', desc:'本味系列走极简路线，笔身干净得像一张白纸。' },
+{ name:'得力 S656 直液式', element:'水', type:'直液笔', desc:'得力把直液笔的价格打下来了，学生党人手一盒。' },
+{ name:'得力 A575 速干中性', element:'水', type:'速干', desc:'速干笔里少见的稳，写到最后一支也不漏墨。' },
+{ name:'得力 S01 按动', element:'水', type:'按动', desc:'按动声清脆，是自习室里最治愈的白噪音。' },
+{ name:'得力 6600ES', element:'水', type:'经典款', desc:'办公桌上的常驻嘉宾，便宜、好写、丢了不心疼。' },
+{ name:'得力 S856 速干', element:'水', type:'速干', desc:'一秒干透，适合做需要反复翻看的错题本。' },
+{ name:'得力 直液式 S656 黑', element:'水', type:'直液笔', desc:'墨量足到夸张，一支能写小半本。' },
+{ name:'百乐 V5 Hi-Tecpoint', element:'水', type:'直液笔', desc:'日系直液的入门款，顺滑度是很多人入坑的起点。' },
+{ name:'百乐 V7 Hi-Tecpoint', element:'水', type:'直液笔', desc:'0.7 的出墨量，写大字或者签名特别有存在感。' },
+{ name:'百乐 Juice 0.5', element:'水', type:'果汁色', desc:'果汁系列的颜色像糖，写笔记会忍不住多写几行。' },
+{ name:'百乐 G-2', element:'水', type:'经典款', desc:'全球卖了三十年的笔，握着它写字有种踏实感。' },
+{ name:'百乐 Acroball', element:'水', type:'油性', desc:'油性墨也能顺滑，写字快的人会爱上它的跟手。' },
+{ name:'百乐 V-ball Grip', element:'水', type:'走珠', desc:'橡胶握位贴合手指，长时间抄写不磨手。' },
+{ name:'三菱 UB-150 直液', element:'水', type:'直液笔', desc:'日本文具店的常青款，出墨均匀得像机器在写。' },
+{ name:'三菱 UB-157 走珠', element:'水', type:'走珠', desc:'笔尖顺滑到有点上瘾，适合大量抄写。' },
+{ name:'三菱 UM-100', element:'水', type:'经典款', desc:'透明笔身能看见墨水一点点减少，很有成就感。' },
+{ name:'三菱 UMN-155', element:'水', type:'按动', desc:'按动加顺滑，是通勤包里最不占地方的一支。' },
+{ name:'三菱 uni-ball Air', element:'水', type:'顺滑', desc:'笔尖会随力度变化粗细，写字有呼吸感。' },
+{ name:'斑马 JJ15 按动', element:'水', type:'按动', desc:'斑马的按动笔，手感扎实，按下去有分量。' },
+{ name:'斑马 Sarasa Clip 0.5', element:'水', type:'夹子笔', desc:'笔夹能夹住任何一本本子，是手帐党的标配。' },
+{ name:'斑马 Sarasa Dry', element:'水', type:'速干', desc:'专为速干设计，左手写字终于不用垫纸了。' },
+{ name:'斑马 Blen 低重心', element:'水', type:'低重心', desc:'重心下沉，写字时手腕不用使劲，很省力。' },
+{ name:'斑马 bLen 低重心', element:'水', type:'低重心', desc:'设计师参与调校的笔，稳得像在纸上滑行。' },
+{ name:'派通 EnerGel BLN105', element:'水', type:'速干', desc:'派通的速干技术，落笔即定，几乎不留痕。' },
+{ name:'派通 Slicci 0.25', element:'水', type:'极细', desc:'细到能写进格子里，适合密排笔记。' },
+{ name:'派通 Energel Infree', element:'水', type:'速干', desc:'笔身配色温柔，速干性能一点不含糊。' },
+{ name:'派通 Tradio', element:'水', type:'钢笔式', desc:'长得像钢笔的中性笔，写起来却毫无负担。' },
+{ name:'派通 Floatune 浮水', element:'水', type:'顺滑', desc:'名字就说明了一切，写起来像笔尖浮在纸面上。' },
+{ name:'东米 DM-911 速干', element:'水', type:'刷题神器', desc:'东米的王牌，速干又耐写，刷题党的续命笔。' },
+{ name:'东米 DM-932 直液', element:'水', type:'直液笔', desc:'直液笔里少见的低价高质，一盒能用很久。' },
+{ name:'东米 顺滑走珠', element:'水', type:'走珠', desc:'走珠的顺滑感配上白菜价，适合囤一抽屉。' },
+{ name:'Kaco Pure 书源', element:'水', type:'国货之光', desc:'Kaco 的设计感配上顺滑笔芯，是国货里的清流。' },
+{ name:'Kaco Green 中性', element:'水', type:'环保', desc:'笔身用环保材料，握感温润，写着心里也舒服。' },
+{ name:'Kaco Retro 走珠', element:'水', type:'复古色', desc:'复古配色加走珠，写日记时特别有仪式感。' },
+{ name:'真彩 GP-009', element:'水', type:'经典款', desc:'真彩的老经典，一块钱能买到踏踏实实的顺滑。' },
+{ name:'真彩 009 经典', element:'水', type:'性价比', desc:'很多人学生时代的第一支中性笔就是它。' },
+{ name:'爱好 GP-1008', element:'水', type:'性价比', desc:'爱好把性价比做到极致，整盒买也不肉疼。' },
+{ name:'爱好 8320 速干', element:'水', type:'速干', desc:'速干性能对得起价格，适合大量做题。' },
+{ name:'宝克 PC-1828', element:'水', type:'大容量', desc:'墨量惊人，一支顶别人三支，适合长期伏案。' },
+{ name:'宝克 1848 大容量', element:'水', type:'大容量', desc:'大容量加顺滑，是抄写党的省心选择。' },
+{ name:'金万年 G-1234', element:'水', type:'经典款', desc:'低调好用，办公桌上永远备着几支。' },
+{ name:'金万年 0.5 速干', element:'水', type:'速干', desc:'速干不挑纸，普通作业本也不洇。' },
+{ name:'天卓 TG-318', element:'水', type:'性价比', desc:'天卓的走量款，便宜到可以随手送人。' },
+{ name:'天卓 好写 0.5', element:'水', type:'顺滑', desc:'名字就叫好写，实际也确实顺得没脾气。' },
+{ name:'五千年 W-386', element:'水', type:'经典款', desc:'老牌国货，出墨稳定，写着写着就习惯了。' },
+{ name:'五千年 大容量', element:'水', type:'大容量', desc:'一支能撑过整个备考季，不用中途换笔。' },
+{ name:'广博 ZX-9001', element:'水', type:'办公款', desc:'广博的办公线，顺滑度和耐用度都在线。' },
+{ name:'齐心 GP-306', element:'水', type:'办公款', desc:'齐心做办公起家，这支笔的稳定性很可靠。' },
+{ name:'现代美 GP-009', element:'水', type:'性价比', desc:'便宜大碗，宿舍公用笔筒里的常客。' },
+
+/* ---------------- 木 · 手帐 / 木质 / 文创 ---------------- */
+{ name:'青禾纪 A5 手帐本', element:'木', type:'手帐', desc:'纸色微黄，写上去像给日子盖了一层温柔的滤镜。' },
+{ name:'青禾纪 复古手帐', element:'木', type:'复古', desc:'封面是旧书质感，翻开就想认真记录今天。' },
+{ name:'青禾纪 周计划', element:'木', type:'计划本', desc:'一周一页，把散落的日子重新排好队。' },
+{ name:'青禾纪 月计划', element:'木', type:'计划本', desc:'月初写满期待，月末回头看，都是走过的路。' },
+{ name:'青禾纪 旅行手帐', element:'木', type:'旅行', desc:'带着它出门，把路上的风和光都夹进书页。' },
+{ name:'青禾纪 空白本', element:'木', type:'空白', desc:'没有格线的束缚，想画想写都由你。' },
+{ name:'青禾纪 每日一页', element:'木', type:'日记', desc:'一天一页，一年下来就是一本自己的编年史。' },
+{ name:'国誉 淡彩曲奇 B5', element:'木', type:'淡彩', desc:'淡淡的莫兰迪色分栏，笔记一眼就能找到重点。' },
+{ name:'国誉 Campus 笔记本', element:'木', type:'经典本', desc:'日本学生的标配，纸质顺滑到钢笔都不洇。' },
+{ name:'国誉 淡彩方格', element:'木', type:'方格本', desc:'方格是最自由的形式，写字画图两不误。' },
+{ name:'国誉 自我手帐', element:'木', type:'手帐', desc:'把目标拆成月周日，自律也可以很温柔。' },
+{ name:'国誉 单词本', element:'木', type:'学习本', desc:'小巧一册，塞进口袋就能背单词。' },
+{ name:'国誉 记事本', element:'木', type:'记事本', desc:'开会记要点，纸面平整，写字不飘。' },
+{ name:'国誉 渡边 笔记本', element:'木', type:'经典本', desc:'渡边的纸是很多人的信仰，写钢笔会感动。' },
+{ name:'三菱 9800 木杆铅笔', element:'木', type:'铅笔', desc:'木杆的香气混着石墨味，是考试最熟悉的味道。' },
+{ name:'三菱 Uni 木轴铅笔', element:'木', type:'铅笔', desc:'木轴握感温润，写久了手心不会出汗。' },
+{ name:'施德楼 Mars Lumograph', element:'木', type:'素描', desc:'德国老牌素描铅笔，灰度层次细腻得惊人。' },
+{ name:'施德楼 蓝杆', element:'木', type:'铅笔', desc:'标志性的蓝杆，画素描的人几乎人手一支。' },
+{ name:'辉柏嘉 9000 素描', element:'木', type:'素描', desc:'绿盒辉柏嘉，是美术生的集体记忆。' },
+{ name:'辉柏嘉 绿盒水溶', element:'木', type:'水溶彩铅', desc:'水一刷就化开，纸上立刻有了颜色。' },
+{ name:'辉柏嘉 铅笔延长器', element:'木', type:'配件', desc:'铅笔用到最后一点也舍不得扔，它能帮你留住。' },
+{ name:'辉柏嘉 48色 木盒', element:'木', type:'彩铅套装', desc:'木盒打开的一瞬间，颜色像花一样铺满桌面。' },
+{ name:'马可 雷诺阿素描', element:'木', type:'素描', desc:'国产素描里的口碑款，手感接近进口。' },
+{ name:'中华 101 绘图铅笔', element:'木', type:'绘图', desc:'几代人的绘图记忆，笔杆上的红字特别亲切。' },
+{ name:'中华 2B 考试铅笔', element:'木', type:'考试', desc:'涂卡专用，石墨够黑，机器读得清楚。' },
+{ name:'晨光 AWP35701 原木', element:'木', type:'原木', desc:'原木笔杆不加漆，握着像握住一小截树枝。' },
+{ name:'晨光 本味 木杆', element:'木', type:'木杆', desc:'本味系列的木杆铅笔，素净得让人心静。' },
+{ name:'晨光 木杆 2B', element:'木', type:'考试', desc:'一盒十二支，够用一整个考试季。' },
+{ name:'晨光 三角木杆', element:'木', type:'矫正握姿', desc:'三角杆逼着你用对姿势，写字手不累。' },
+{ name:'得力 原木铅笔', element:'木', type:'原木', desc:'得力的原木铅笔，便宜到可以随便削。' },
+{ name:'得力 木杆 HB', element:'木', type:'铅笔', desc:'HB 是最万能的硬度，写字画画都能凑合。' },
+{ name:'得力 洞洞铅笔', element:'木', type:'矫正握姿', desc:'洞洞设计帮小朋友找到正确的握笔位置。' },
+{ name:'九口山 手帐', element:'木', type:'文创', desc:'国内独立文创的代表，每一本都有点脾气。' },
+{ name:'九口山 井田志', element:'木', type:'文创', desc:'井田格的设计，写字会自动变得整齐。' },
+{ name:'kinbor 手帐本', element:'木', type:'手帐', desc:'性价比很高的手帐品牌，内页选择特别多。' },
+{ name:'无印良品 木轴铅笔', element:'木', type:'极简', desc:'MUJI 的铅笔没有任何多余装饰，纯粹得像呼吸。' },
+{ name:'无印良品 再生纸本', element:'木', type:'环保', desc:'再生纸的粗糙感，反而让字迹更有温度。' },
+{ name:'手帐 和纸胶带', element:'木', type:'胶带', desc:'一卷胶带就能把平淡的一页变成风景。' },
+{ name:'复古 邮票贴纸', element:'木', type:'贴纸', desc:'贴上它，笔记本立刻有了旅行的味道。' },
+{ name:'和纸 贴纸包', element:'木', type:'贴纸', desc:'一包几十张，随手一贴就是手帐的灵魂。' },
+{ name:'木质 书签套装', element:'木', type:'书签', desc:'木纹每一片都不同，像给书夹了一片森林。' },
+{ name:'木质 笔盒', element:'木', type:'收纳', desc:'木盒打开有淡淡的木香，笔也有了家。' },
+{ name:'木质 桌面收纳', element:'木', type:'收纳', desc:'把散落的笔和小物收进木格子里，桌面就静了。' },
+{ name:'木纹 活页本', element:'木', type:'活页', desc:'木纹封面加活页内芯，可以一直换纸一直用。' },
+{ name:'木纹 文件夹', element:'木', type:'文件夹', desc:'木纹让普通的文件夹多了一点手作气。' },
+{ name:'木制 尺子', element:'木', type:'尺子', desc:'木尺画线不会刮纸，边缘也温润不硌手。' },
+{ name:'木柄 剪刀', element:'木', type:'剪刀', desc:'木柄握起来比塑料舒服，剪东西都变得从容。' },
+{ name:'木质 便签夹', element:'木', type:'便签夹', desc:'夹住今天要做的事，立在桌角像个小提醒。' },
+{ name:'木质 印章', element:'木', type:'印章', desc:'木柄印章盖下去，纸上就有了自己的记号。' },
+{ name:'复古 火漆印章', element:'木', type:'火漆', desc:'蜡融化的一瞬间，写信这件事变得郑重。' },
+{ name:'竹木 笔筒', element:'木', type:'收纳', desc:'竹子的纹理天然，插满笔也不显乱。' },
+{ name:'竹制 阅读架', element:'木', type:'阅读架', desc:'把书立起来读，脖子终于不用一直低着。' },
+{ name:'竹编 笔帘', element:'木', type:'笔帘', desc:'卷起来是一小卷，展开就是一张竹席。' },
+{ name:'木制 书立', element:'木', type:'书立', desc:'木书立比铁的更温柔，不会刮伤书脊。' },
+{ name:'木盒 彩铅套装', element:'木', type:'彩铅', desc:'木盒分层收纳，颜色一目了然。' },
+{ name:'马可 48色 木杆彩铅', element:'木', type:'彩铅', desc:'四十八色够画完整个春天。' },
+{ name:'手帐 打孔器', element:'木', type:'工具', desc:'自己打孔自己装订，手帐的自由度就来了。' },
+{ name:'手帐 胶带收纳', element:'木', type:'收纳', desc:'把几十卷胶带码整齐，光是看着就治愈。' },
+{ name:'竹子 笔记本', element:'木', type:'环保', desc:'竹纤维封面，摸上去有细细的纹路。' },
+{ name:'木纹 桌面垫', element:'木', type:'桌垫', desc:'铺开像一块木桌板，键盘和本子都稳了。' },
+{ name:'国誉 淡彩 便签', element:'木', type:'便签', desc:'淡彩便签贴在书页边，重点就浮出来了。' },
+{ name:'青禾纪 植物标本本', element:'木', type:'文创', desc:'封面压着干花标本，翻开像走进一间小温室。' },
+
+/* ---------------- 金 · 金属 / 极细 / 考试专用 ---------------- */
+{ name:'红环 600 自动铅笔', element:'金', type:'金属', desc:'德国红环的经典，全金属笔身，握着就有分量。' },
+{ name:'红环 Rapid Pro', element:'金', type:'金属', desc:'工程师的笔，重心精准，画线稳得像尺子。' },
+{ name:'红环 Tikky', element:'金', type:'入门', desc:'红环的平价线，第一次摸到德系手感。' },
+{ name:'红环 800', element:'金', type:'金属', desc:'可伸缩笔尖，收起来不会扎破笔袋。' },
+{ name:'施德楼 925 25', element:'金', type:'金属', desc:'制图党的信仰，滚花握位防滑得恰到好处。' },
+{ name:'施德楼 925 35', element:'金', type:'金属', desc:'蓝色笔身是它的标志，冷静又克制。' },
+{ name:'施德楼 925 85', element:'金', type:'金属', desc:'更细的笔尖，适合画精密的线条。' },
+{ name:'白金 MSD-1500', element:'金', type:'金属', desc:'日本白金的制图笔，金属质感做得很讲究。' },
+{ name:'派通 Graphgear 1000', element:'金', type:'金属', desc:'全金属加重心，画图时笔尖几乎不会晃。' },
+{ name:'派通 Orenz 0.2', element:'金', type:'极细', desc:'0.2 的极细，写小字像针尖在纸上走。' },
+{ name:'三菱 uni Kuru Toga', element:'金', type:'自动旋转', desc:'会自动转芯，笔尖永远保持锋利，字迹粗细一致。' },
+{ name:'三菱 Kuru Toga Advance', element:'金', type:'自动旋转', desc:'升级版转芯更快，长时间写字也不钝。' },
+{ name:'三菱 Signo 0.38', element:'金', type:'极细', desc:'0.38 的细，写在格子里一点不挤。' },
+{ name:'三菱 Signo RT1', element:'金', type:'极细', desc:'按动加极细，随身带一支就够用。' },
+{ name:'三菱 0.28 极细', element:'金', type:'极细', desc:'细到极限，适合在窄行里写密密麻麻的笔记。' },
+{ name:'百乐 Juice Up 0.4', element:'金', type:'极细', desc:'针管笔尖，出墨精准，写小楷特别好看。' },
+{ name:'百乐 Opt 0.5', element:'金', type:'自动铅笔', desc:'笔身轻巧，写字时几乎感觉不到重量。' },
+{ name:'百乐 制图自动铅笔', element:'金', type:'制图', desc:'为画图而生，线条干净利落。' },
+{ name:'百乐 0.25 极细', element:'金', type:'极细', desc:'极细里的极细，适合需要精确到毫米的场合。' },
+{ name:'斑马 Sarasa Nano 0.3', element:'金', type:'极细', desc:'0.3 却意外顺滑，不会刮纸。' },
+{ name:'斑马 真美 0.3', element:'金', type:'极细', desc:'细笔尖配稳出墨，考试写小字很安心。' },
+{ name:'斑马 0.3 极细', element:'金', type:'极细', desc:'笔记密排党的心头好，一页能塞下更多内容。' },
+{ name:'派通 Slicci 0.3', element:'金', type:'极细', desc:'细而不断墨，是细笔里少见的稳定选手。' },
+{ name:'得力 连笔王', element:'金', type:'考试专用', desc:'名字就说明了用途，连笔写快也不断墨。' },
+{ name:'得力 金属 按动', element:'金', type:'金属', desc:'金属笔身加按动结构，办公室里的体面选择。' },
+{ name:'得力 S08 金属', element:'金', type:'金属', desc:'磨砂金属笔杆，握着冰凉，夏天很舒服。' },
+{ name:'得力 0.38 极细', element:'金', type:'极细', desc:'国货极细的代表，价格只有进口的零头。' },
+{ name:'得力 涂卡铅笔', element:'金', type:'考试专用', desc:'涂卡专用笔芯，一划就是标准方块。' },
+{ name:'晨光 金属 中性笔', element:'金', type:'金属', desc:'金属笔身不廉价，签字时手感很正。' },
+{ name:'晨光 优品 金属', element:'金', type:'金属', desc:'优品线的金属款，做工比价格体面。' },
+{ name:'晨光 极细 0.38', element:'金', type:'极细', desc:'0.38 的国货平价版，写小字足够用。' },
+{ name:'晨光 涂卡笔', element:'金', type:'考试专用', desc:'高考涂卡的标准配置，机器识别率高。' },
+{ name:'考试专用 2B 涂卡笔', element:'金', type:'考试专用', desc:'考前必备，涂满一格只要两秒。' },
+{ name:'不锈钢 直尺', element:'金', type:'尺子', desc:'钢尺画线不会卷边，用十年还是直的。' },
+{ name:'金属 圆规', element:'金', type:'圆规', desc:'金属圆规画圆稳，半径锁得住。' },
+{ name:'金属 量角器', element:'金', type:'尺规', desc:'金属刻度不会磨掉，考试用特别安心。' },
+{ name:'金属 三角尺', element:'金', type:'尺规', desc:'三角尺加金属边，画直角特别利落。' },
+{ name:'金属 尺规套装', element:'金', type:'尺规', desc:'一套配齐，几何题的仪式感从这里开始。' },
+{ name:'不锈钢 美工刀', element:'金', type:'刀具', desc:'刀片锋利，裁纸像切豆腐。' },
+{ name:'金属 剪刀', element:'金', type:'剪刀', desc:'金属剪刀剪得干脆，不会把纸扯毛。' },
+{ name:'金属 订书机', element:'金', type:'装订', desc:'压下去"咔"一声，一沓纸就服帖了。' },
+{ name:'金属 笔筒', element:'金', type:'收纳', desc:'铁艺笔筒放桌上，冷感和秩序感都刚好。' },
+{ name:'金属 笔夹', element:'金', type:'配件', desc:'一支小笔夹，让笔能别在任何地方。' },
+{ name:'金属 书签', element:'金', type:'书签', desc:'薄薄一片金属，夹在书里像一道光。' },
+{ name:'黄铜 直尺', element:'金', type:'尺子', desc:'黄铜会随时间变旧，越用越有味道。' },
+{ name:'铝制 笔盒', element:'金', type:'收纳', desc:'铝盒轻又硬，摔几次也不会变形。' },
+{ name:'铁盒 彩铅', element:'金', type:'彩铅', desc:'铁盒装彩铅，磕碰不心疼，还方便携带。' },
+{ name:'金属 橡皮', element:'金', type:'橡皮', desc:'金属外壳包着橡皮，用完可以换芯。' },
+{ name:'金属 削笔器', element:'金', type:'削笔', desc:'金属刀片削得又快又整齐。' },
+{ name:'金属 桌面收纳', element:'金', type:'收纳', desc:'铁艺分层架，把桌面垂直空间也用起来。' },
+{ name:'金属 便签夹', element:'金', type:'便签夹', desc:'夹住便签立在桌边，抬眼就能看见。' },
+{ name:'金属 笔架', element:'金', type:'收纳', desc:'横放竖放都稳，笔不再滚来滚去。' },
+{ name:'金属 转笔刀', element:'金', type:'削笔', desc:'转两圈就好，木屑收在盒里不乱飞。' },
+{ name:'金属 台历架', element:'金', type:'桌面', desc:'金属支架立起台历，桌面立刻有条理。' },
+{ name:'金属 名片座', element:'金', type:'桌面', desc:'小小一个金属座，让卡片有地方站着。' },
+{ name:'金属 印章盒', element:'金', type:'收纳', desc:'印章收在铁盒里，印泥不会弄脏抽屉。' },
+{ name:'金属 火漆炉', element:'金', type:'火漆', desc:'金属炉架配蜡烛，融蜡的过程很治愈。' },
+{ name:'金属 夹子', element:'金', type:'夹子', desc:'金属夹夹力足，夹厚纸也不松。' },
+{ name:'金属 回形针', element:'金', type:'回形针', desc:'一盒回形针，是办公室里最朴素的秩序。' },
+{ name:'金属 图钉', element:'金', type:'图钉', desc:'钉在软木板上，把灵感都钉住。' },
+{ name:'金属 文件夹', element:'金', type:'文件夹', desc:'金属夹板夹住一沓纸，站着也能写。' },
+{ name:'红环 600 0.5 银', element:'金', type:'金属', desc:'银色版本更冷，适合喜欢极简的人。' },
+
+/* ---------------- 火 · 高颜值 / 多巴胺 / IP联名 ---------------- */
+{ name:'点石 极光 按动', element:'火', type:'高颜值', desc:'笔身像被极光扫过，转一下颜色就变一次。' },
+{ name:'点石 极光 限定', element:'火', type:'限定', desc:'限定色总是断货，遇到就别犹豫。' },
+{ name:'点石 敦煌 联名', element:'火', type:'IP联名', desc:'把壁画的颜色搬上笔身，写字都带了点盛大。' },
+{ name:'点石 国风 限定', element:'火', type:'国风', desc:'国风配色不俗气，反而有点清雅。' },
+{ name:'点石 果冻 系列', element:'火', type:'果冻感', desc:'半透明笔身像果冻，看着就想捏一下。' },
+{ name:'点石 彩色 走珠', element:'火', type:'彩色', desc:'一套六色，做笔记时重点会自动跳出来。' },
+{ name:'晨光 海贼王联名', element:'火', type:'IP联名', desc:'路飞在笔杆上，写作业都像要出海。' },
+{ name:'晨光 故宫联名', element:'火', type:'IP联名', desc:'故宫的红墙金瓦，被收进了一支笔里。' },
+{ name:'晨光 大英博物馆联名', element:'火', type:'IP联名', desc:'文物纹样印在笔上，日常写字也有了历史感。' },
+{ name:'晨光 樱花季 限定', element:'火', type:'限定', desc:'粉白配色，像把整个春天别在笔袋上。' },
+{ name:'晨光 国潮 系列', element:'火', type:'国潮', desc:'国潮不是堆元素，它把留白做得很克制。' },
+{ name:'晨光 少女心 系列', element:'火', type:'高颜值', desc:'颜色软到心里，写日记的时候特别配。' },
+{ name:'晨光 彩色 中性笔套装', element:'火', type:'彩色', desc:'十二色一套，笔记分色从此不再是难题。' },
+{ name:'晨光 马卡龙 荧光笔', element:'火', type:'荧光笔', desc:'马卡龙色不刺眼，划重点也不会盖住字。' },
+{ name:'晨光 丙烯 马克笔', element:'火', type:'马克笔', desc:'丙烯覆盖力强，深色纸上也能显色。' },
+{ name:'得力 故宫 文创', element:'火', type:'IP联名', desc:'得力的故宫线，把宫廷色做得很温柔。' },
+{ name:'得力 颐和园联名', element:'火', type:'IP联名', desc:'长廊的彩绘变成了笔身上的花纹。' },
+{ name:'得力 国潮 系列', element:'火', type:'国潮', desc:'国潮配色加磨砂质感，拿在手里很有面子。' },
+{ name:'得力 甜品 系列', element:'火', type:'高颜值', desc:'像一盒小甜点，写字都变甜了。' },
+{ name:'得力 彩色 中性笔', element:'火', type:'彩色', desc:'颜色饱和度刚好，做思维导图特别清楚。' },
+{ name:'得力 双头 马克笔', element:'火', type:'马克笔', desc:'一头粗一头细，勾线和填色一支搞定。' },
+{ name:'斑马 Cinnamoroll 联名', element:'火', type:'IP联名', desc:'大耳狗在笔杆上，软萌到舍不得用。' },
+{ name:'斑马 三丽鸥 联名', element:'火', type:'IP联名', desc:'三丽鸥全家桶，集齐一套是很多人的执念。' },
+{ name:'斑马 Mildliner', element:'火', type:'荧光笔', desc:'莫兰迪色系的荧光笔，划重点像在画画。' },
+{ name:'斑马 Mildliner 双头', element:'火', type:'荧光笔', desc:'一头宽一头细，标题和正文都能照顾到。' },
+{ name:'斑马 可擦笔', element:'火', type:'可擦', desc:'写错了擦掉重来，计划本终于敢下笔了。' },
+{ name:'斑马 果汁 系列', element:'火', type:'果汁色', desc:'果汁色一套，笔记看起来像水果摊。' },
+{ name:'百乐 Kakuno 笑脸', element:'火', type:'钢笔', desc:'笔尖上有个笑脸，每次低头都能被治愈。' },
+{ name:'百乐 Kakuno 限定', element:'火', type:'限定', desc:'限定配色一出就被抢空，颜值确实能打。' },
+{ name:'百乐 Frixion 可擦', element:'火', type:'可擦', desc:'摩擦生热就消失，草稿可以放心写。' },
+{ name:'百乐 Frixion 彩色', element:'火', type:'可擦彩色', desc:'可擦加彩色，手帐改稿再也不留疤。' },
+{ name:'三菱 可擦笔', element:'火', type:'可擦', desc:'三菱的可擦技术，擦得干净不留痕。' },
+{ name:'樱花 彩色 中性', element:'火', type:'彩色', desc:'樱花的颜色偏柔，写出来很日系。' },
+{ name:'Kaco 复古色 中性', element:'火', type:'复古色', desc:'Kaco 的复古色一套，配色功力很在线。' },
+{ name:'Kaco 马卡龙', element:'火', type:'马卡龙', desc:'马卡龙配色加磨砂笔身，颜值和手感都在线。' },
+{ name:'马卡龙 活页本', element:'火', type:'活页', desc:'糖果色封面，翻开的一瞬间心情就亮了。' },
+{ name:'马卡龙 笔袋', element:'火', type:'笔袋', desc:'软乎乎的笔袋，装得下所有喜欢。' },
+{ name:'马卡龙 便签', element:'火', type:'便签', desc:'一叠彩色便签，把待办事项变得可爱。' },
+{ name:'多巴胺 荧光笔', element:'火', type:'荧光笔', desc:'高饱和但不刺眼，划完整页像打了光。' },
+{ name:'多巴胺 便利贴', element:'火', type:'便利贴', desc:'颜色够跳，贴在电脑边一眼就能看到。' },
+{ name:'多巴胺 笔袋', element:'火', type:'笔袋', desc:'把喜欢的颜色都装进去，出门都有精神。' },
+{ name:'多巴胺 桌面垫', element:'火', type:'桌垫', desc:'一整块亮色铺开，桌面瞬间有了元气。' },
+{ name:'彩虹 索引贴', element:'火', type:'索引', desc:'七彩索引一贴，翻书找章节快得离谱。' },
+{ name:'彩色 文件夹', element:'火', type:'文件夹', desc:'按颜色分类，找资料不用再翻半天。' },
+{ name:'彩色 回形针', element:'火', type:'回形针', desc:'彩色回形针是低成本的心情提升。' },
+{ name:'渐变 笔记本', element:'火', type:'渐变', desc:'封面从浅到深渐变，像一小片天空。' },
+{ name:'镭射 手帐本', element:'火', type:'镭射', desc:'光一照就变色，拿在手里像块宝石。' },
+{ name:'极光 活页本', element:'火', type:'活页', desc:'极光封面配活页芯，好看又好用。' },
+{ name:'星空 笔记本', element:'火', type:'星空', desc:'深蓝底上撒满星点，写日记像在夜里说话。' },
+{ name:'镭射 贴纸', element:'火', type:'贴纸', desc:'镭射贴纸一贴，普通本子立刻有了光。' },
+{ name:'彩色 马克笔', element:'火', type:'马克笔', desc:'一套颜色齐全，画手帐插图足够用。' },
+{ name:'彩色 高光笔', element:'火', type:'高光', desc:'在深色纸上点几笔，画面立刻活了。' },
+{ name:'细闪 中性笔', element:'火', type:'珠光色', desc:'写出来带细闪，贺卡和手帐都很合适。' },
+{ name:'珠光 中性笔', element:'火', type:'珠光', desc:'珠光墨水在灯下会亮，低调但藏不住。' },
+{ name:'三丽鸥 笔袋', element:'火', type:'IP联名', desc:'软萌角色印满整个笔袋，打开就想笑。' },
+{ name:'迪士尼 联名', element:'火', type:'IP联名', desc:'童年角色陪着你，写字都轻快了些。' },
+{ name:'哈利波特 联名', element:'火', type:'IP联名', desc:'魔法世界的配色，写笔记像在写咒语。' },
+{ name:'线条小狗 联名', element:'火', type:'IP联名', desc:'简单几笔的小狗，治愈力却很强。' },
+{ name:'黄油熊 联名', element:'火', type:'IP联名', desc:'圆滚滚的黄油熊，看一眼心情就软了。' },
+{ name:'彩色 便利贴', element:'火', type:'便利贴', desc:'一叠彩纸，把琐事变成彩色的小方块。' },
+{ name:'晨光 蜜桃 系列', element:'火', type:'高颜值', desc:'粉橘渐层像一颗熟透的桃，写作业都不那么苦了。' },
+{ name:'得力 落日 渐变笔', element:'火', type:'渐变', desc:'笔杆从橙到紫，像把傍晚的天色握在手里。' },
+
+/* ---------------- 土 · 牛皮纸 / 量大 / 修正带 ---------------- */
+{ name:'前通 软面本', element:'土', type:'软面本', desc:'软面可以卷起来塞包里，摊开却平整得像新的。' },
+{ name:'前通 牛皮纸本', element:'土', type:'牛皮纸', desc:'牛皮纸的粗粝感，让字迹显得更诚实。' },
+{ name:'前通 A5 软抄', element:'土', type:'软抄', desc:'便宜大碗，随手记点什么最合适。' },
+{ name:'牛皮纸 笔记本', element:'土', type:'牛皮纸', desc:'不加任何装饰，朴素得让人想认真写字。' },
+{ name:'牛皮纸 档案袋', element:'土', type:'收纳', desc:'一沓资料装进去，边角不会折。' },
+{ name:'牛皮纸 文件袋', element:'土', type:'收纳', desc:'按科目分袋装，找卷子再也不用翻箱倒柜。' },
+{ name:'牛皮纸 信封', element:'土', type:'信封', desc:'牛皮纸信封有种旧时代的郑重。' },
+{ name:'牛皮纸 手帐内页', element:'土', type:'内页', desc:'换一张牛皮纸内页，手帐立刻换了气质。' },
+{ name:'晨光 量贩 中性笔', element:'土', type:'量贩', desc:'一盒二十支，一个学期都不用再买笔。' },
+{ name:'晨光 20支装', element:'土', type:'量贩', desc:'整盒囤着，宿舍分着用最划算。' },
+{ name:'晨光 替芯 20支', element:'土', type:'替芯', desc:'换芯比换笔省钱，笔杆可以一直用下去。' },
+{ name:'得力 30支装', element:'土', type:'量贩', desc:'三十支一盒，班级团购的常见选择。' },
+{ name:'得力 量贩 替芯', element:'土', type:'替芯', desc:'替芯量贩装，用完就换，不心疼。' },
+{ name:'得力 替芯 50支', element:'土', type:'替芯', desc:'五十支够写一整个高三。' },
+{ name:'点石 替芯 量贩', element:'土', type:'替芯', desc:'好笔配好芯，量贩装把成本压到最低。' },
+{ name:'白雪 替芯 量贩', element:'土', type:'替芯', desc:'直液笔也有替芯，用完不用整支扔。' },
+{ name:'修正带 晨光', element:'土', type:'修正带', desc:'一划就盖住，改错的时候不至于太狼狈。' },
+{ name:'修正带 得力', element:'土', type:'修正带', desc:'带芯顺滑不断带，是错题本的好搭档。' },
+{ name:'修正带 乐普升', element:'土', type:'修正带', desc:'国货修正带的老牌子，贴合度高。' },
+{ name:'修正带 普乐士', element:'土', type:'修正带', desc:'日系修正带的细腻，盖上去几乎看不出来。' },
+{ name:'修正液 晨光', element:'土', type:'修正液', desc:'刷头细，补小错特别精准。' },
+{ name:'修正液 得力', element:'土', type:'修正液', desc:'干得快，不会蹭得满手白。' },
+{ name:'橡皮 晨光 4B', element:'土', type:'橡皮', desc:'4B 擦得干净，用力也不伤纸。' },
+{ name:'橡皮 得力', element:'土', type:'橡皮', desc:'便宜好用，一盒能用一整年。' },
+{ name:'橡皮 樱花', element:'土', type:'橡皮', desc:'樱花的橡皮屑成条，桌面不会一片狼藉。' },
+{ name:'橡皮 辉柏嘉', element:'土', type:'橡皮', desc:'德国橡皮，擦铅笔线几乎不留影。' },
+{ name:'得力 A4 复印纸', element:'土', type:'纸张', desc:'一箱五百张，打印草稿都不用心疼。' },
+{ name:'晨光 A4 纸', element:'土', type:'纸张', desc:'纸面白净，打印出来字迹很清楚。' },
+{ name:'广博 复印纸', element:'土', type:'纸张', desc:'广博的纸厚实，双面打印也不透。' },
+{ name:'草稿纸 整箱', element:'土', type:'草稿纸', desc:'算题可以放肆写，草稿纸自由最爽。' },
+{ name:'演算纸 1000张', element:'土', type:'草稿纸', desc:'一千张堆在桌角，像一座安全感的小山。' },
+{ name:'田字格 本', element:'土', type:'练字本', desc:'一格一字，把字慢慢写回正轨。' },
+{ name:'拼音本', element:'土', type:'练习本', desc:'四线三格，是每个孩子写字的第一步。' },
+{ name:'作文本', element:'土', type:'练习本', desc:'格子够大，写满一页很有成就感。' },
+{ name:'练习本 10本装', element:'土', type:'量贩', desc:'十本一捆，开学前买一次就够。' },
+{ name:'作业本 20本装', element:'土', type:'量贩', desc:'二十本整整齐齐码好，看着就踏实。' },
+{ name:'笔记本 10本装', element:'土', type:'量贩', desc:'分科目各用一本，一学期刚好用完。' },
+{ name:'软抄本 10本', element:'土', type:'量贩', desc:'软抄本便宜，随手撕一页也不心疼。' },
+{ name:'线圈本 加厚', element:'土', type:'线圈本', desc:'线圈能完全摊平，写到最后一行也不别扭。' },
+{ name:'活页纸 A5', element:'土', type:'活页纸', desc:'活页纸可以随时增减，笔记永远有序。' },
+{ name:'活页纸 B5', element:'土', type:'活页纸', desc:'B5 够大，写思维导图不会挤。' },
+{ name:'活页 替芯', element:'土', type:'替芯', desc:'一本活页夹，可以用很多年。' },
+{ name:'文件夹 10个装', element:'土', type:'文件夹', desc:'十个一包，把一学期的资料分门别类。' },
+{ name:'资料册 40页', element:'土', type:'资料册', desc:'四十页插袋，卷子和讲义都能收进去。' },
+{ name:'试卷袋', element:'土', type:'收纳', desc:'考完的卷子塞进袋子，复习时一翻就到。' },
+{ name:'文件盒', element:'土', type:'收纳', desc:'立着收纳，桌面空间立刻清爽。' },
+{ name:'桌面 收纳盒', element:'土', type:'收纳', desc:'分格收纳，笔、夹子、便签各归各位。' },
+{ name:'笔筒 大容量', element:'土', type:'收纳', desc:'能插下三十支笔，桌面终于不乱了。' },
+{ name:'笔袋 帆布', element:'土', type:'笔袋', desc:'帆布耐磨，用久了会有一点点温柔的旧感。' },
+{ name:'笔袋 大容量', element:'土', type:'笔袋', desc:'装得下整套彩笔，出门画画很方便。' },
+{ name:'便签 大容量', element:'土', type:'便签', desc:'一大叠便签，随手记随手贴。' },
+{ name:'便利贴 整包', element:'土', type:'便利贴', desc:'整包买最划算，用完再拆一包。' },
+{ name:'标签纸 整包', element:'土', type:'标签', desc:'贴标签是整理癖最快乐的一步。' },
+{ name:'胶带 大卷', element:'土', type:'胶带', desc:'大卷能用很久，封箱子贴本子都靠它。' },
+{ name:'固体胶 晨光', element:'土', type:'胶水', desc:'涂起来顺滑，粘纸不会皱。' },
+{ name:'固体胶 得力', element:'土', type:'胶水', desc:'得力固体胶干得快，粘得牢。' },
+{ name:'双面胶 整卷', element:'土', type:'胶带', desc:'整卷双面胶，手帐拼贴的秘密武器。' },
+{ name:'订书钉 整盒', element:'土', type:'耗材', desc:'一整盒五千枚，够用到毕业。' },
+{ name:'回形针 整盒', element:'土', type:'耗材', desc:'一盒回形针，是最便宜的秩序感。' },
+{ name:'长尾夹 整盒', element:'土', type:'耗材', desc:'长尾夹夹力强，夹厚资料也不松。' },
+{ name:'削笔器 大容量', element:'土', type:'削笔', desc:'大容量笔屑盒，一周倒一次就行。' },
+{ name:'前通 牛皮纸 便签本', element:'土', type:'牛皮纸', desc:'一小本牛皮纸便签，随手记下的都是要紧事。' },
+];
+
+
+/* ============================================================
+   PART 4 · 终极匹配逻辑
+   ============================================================ */
+
+/* 稳定哈希，用于同分时的确定性排序 */
+function stableHash(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = ((h << 5) - h + str.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+function matchStationery(xiji, answers, seed) {
+  const favor = xiji.favor;
+  const disfavor = xiji.disfavor;
+  const weakest = xiji.weakest;
+  const prefEls = answers.map(function (a) { return a.el; });
+  const prefTags = [];
+  answers.forEach(function (a) {
+    if (a.tags) a.tags.forEach(function (t) { prefTags.push(t); });
+  });
+  const salt = seed || '';
+
+  const scored = stationeryData.map(function (item) {
+    let score = 0;
+    const reasons = [];
+
+    /* 1. 五行喜用匹配 —— 权重最高 */
+    if (item.element === favor[0]) {
+      score += 140;
+      reasons.push('正中你最需要的「' + item.element + '」');
+    } else if (favor.indexOf(item.element) > -1) {
+      score += 105;
+      reasons.push('契合你喜用的「' + item.element + '」');
+    }
+
+    /* 2. 补足八字最弱的五行 */
+    if (item.element === weakest) {
+      score += 55;
+      if (favor.indexOf(item.element) === -1) {
+        reasons.push('补上你八字最弱的「' + item.element + '」');
+      }
+    }
+
+    /* 3. 问卷五行偏好 */
+    let prefHits = 0;
+    for (let i = 0; i < prefEls.length; i++) {
+      if (prefEls[i] === item.element) prefHits++;
+    }
+    if (prefHits > 0) {
+      score += prefHits * 26;
+      reasons.push('也贴合你的审美与手感偏好');
+    }
+
+    /* 4. 文具类型语义匹配（困扰 / 风格 / 书写习惯） */
+    let tagHits = 0;
+    for (let i = 0; i < prefTags.length; i++) {
+      if (item.type.indexOf(prefTags[i]) > -1 ||
+          item.name.indexOf(prefTags[i]) > -1) {
+        tagHits++;
+      }
+    }
+    if (tagHits > 0) {
+      score += Math.min(tagHits, 3) * 12;
+      if (reasons.length === 0) reasons.push('与你当下的需求对得上');
+    }
+
+    /* 5. 忌神降权 */
+    if (disfavor.indexOf(item.element) > -1) score -= 75;
+
+    /* 6. 日柱种子微扰：仅用于同层级内打散，不同命盘会遇见不同好物 */
+    score += (stableHash(item.name + salt) % 900) / 100;
+
+    return { item: item, score: score, reasons: reasons };
+  });
+
+  scored.sort(function (a, b) { return b.score - a.score; });
+
+  /* 优先保证三款五行各不相同，不足时再放宽 */
+  const picked = [];
+  const seen = {};
+
+  for (let cap = 1; cap <= 2 && picked.length < 3; cap++) {
+    for (let i = 0; i < scored.length && picked.length < 3; i++) {
+      const el = scored[i].item.element;
+      if ((seen[el] || 0) >= cap) continue;
+      if (picked.indexOf(scored[i]) > -1) continue;
+      seen[el] = (seen[el] || 0) + 1;
+      picked.push(scored[i]);
+    }
+  }
+  return picked;
+}
+
+
+/* ============================================================
+   PART 5 · 界面流程控制
+   ============================================================ */
+
+const state = {
+  step: 0,
+  answers: []
+};
+
+const $ = function (id) { return document.getElementById(id); };
+
+function show(id) {
+  ['screenStart', 'screenQuiz', 'screenBirth', 'screenResult'].forEach(function (s) {
+    $(s).classList.add('hidden');
+  });
+  $(id).classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ---- 渲染问卷 ---- */
+function renderQuiz() {
+  const q = QUIZ[state.step];
+  const picked = state.answers[state.step];
+
+  $('progressFill').style.width = ((state.step) / QUIZ.length * 100) + '%';
+  $('progressText').textContent = (state.step + 1) + ' / ' + QUIZ.length;
+
+  let html = '';
+  html += '<div class="q-index">Q U E S T I O N &nbsp;' + q.index + '</div>';
+  html += '<div class="q-title">' + q.title + '</div>';
+  html += '<p class="q-sub">' + q.sub + '</p>';
+  html += '<div class="options">';
+
+  q.options.forEach(function (opt, i) {
+    const active = picked && picked.label === opt.label ? ' active' : '';
+    html += '<div class="option' + active + '" data-i="' + i + '">';
+    html += '  <div class="option-dot"></div>';
+    html += '  <div class="option-body">';
+    html += '    <div class="option-label">' + opt.label + '</div>';
+    html += '    <div class="option-desc">' + opt.desc + '</div>';
+    html += '  </div>';
+    html += '  <div class="option-el">' + opt.el + '</div>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  html += '<button class="btn" id="btnNext" style="margin-top:24px;" ' +
+          (picked ? '' : 'disabled') + '>' +
+          (state.step === QUIZ.length - 1 ? '下 一 步' : '继 续') + '</button>';
+
+  $('quizBody').innerHTML = html;
+  $('quizBody').classList.remove('fade-in');
+  void $('quizBody').offsetWidth;
+  $('quizBody').classList.add('fade-in');
+
+  /* 选项点击 */
+  Array.prototype.forEach.call(document.querySelectorAll('.option'), function (el) {
+    el.addEventListener('click', function () {
+      const i = parseInt(el.getAttribute('data-i'), 10);
+      state.answers[state.step] = q.options[i];
+
+      Array.prototype.forEach.call(document.querySelectorAll('.option'), function (o) {
+        o.classList.remove('active');
+      });
+      el.classList.add('active');
+      $('btnNext').disabled = false;
+    });
+  });
+
+  /* 下一步 */
+  $('btnNext').addEventListener('click', function () {
+    if (!state.answers[state.step]) return;
+    if (state.step < QUIZ.length - 1) {
+      state.step++;
+      renderQuiz();
+    } else {
+      show('screenBirth');
+    }
+  });
+}
+
+/* ---- 渲染结果 ---- */
+function renderResult(result, answers) {
+  const xj = result.xiji;
+
+  /* 四柱 */
+  let ph = '';
+  result.pillars.forEach(function (p) {
+    const ge = p.gan ? GAN_WUXING[p.ganIndex] : '';
+    const ze = p.zhi ? ZHI_WUXING[p.zhiIndex] : '';
+    ph += '<div class="pillar">';
+    ph += '  <div class="pillar-name">' + p.label + '</div>';
+    ph += '  <div class="pillar-char el-' + elClass(ge) + '">' + (p.gan || '—') + '</div>';
+    ph += '  <div class="pillar-char el-' + elClass(ze) + '">' + (p.zhi || '—') + '</div>';
+    ph += '  <div class="pillar-el">' + (ge || '未知') + '</div>';
+    ph += '</div>';
+  });
+  $('pillars').innerHTML = ph;
+
+  /* 五行条 */
+  const order = ['木', '火', '土', '金', '水'];
+  const cls = { '木':'wood', '火':'fire', '土':'earth', '金':'metal', '水':'water' };
+  let maxV = 1;
+  order.forEach(function (e) { if (result.counts[e] > maxV) maxV = result.counts[e]; });
+
+  let bh = '';
+  order.forEach(function (e) {
+    const v = result.counts[e];
+    const h = Math.max((v / maxV) * 100, 6);
+    bh += '<div class="bar-item">';
+    bh += '  <div class="bar-track">';
+    bh += '    <div class="bar-fill ' + cls[e] + '" data-h="' + h + '">' + v.toFixed(1) + '</div>';
+    bh += '  </div>';
+    bh += '  <div class="bar-name">' + e + '</div>';
+    bh += '</div>';
+  });
+  $('bars').innerHTML = bh;
+
+  setTimeout(function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.bar-fill'), function (el) {
+      el.style.height = el.getAttribute('data-h') + '%';
+    });
+  }, 80);
+
+  /* 喜忌 */
+  $('favorText').textContent = xj.favor.join(' ');
+  $('disfavorText').textContent = xj.disfavor.join(' ');
+
+  /* 文案 */
+  const strongTxt = xj.strong ? '偏强' : '偏弱';
+  const logic = xj.strong
+    ? '日主偏强，宜以财星、食伤泄秀，以官杀制衡'
+    : '日主偏弱，宜以印星、比劫生扶帮身';
+  $('summary').innerHTML =
+    '日主 <b>' + xj.dayGan + xj.me + '</b>，五行' + strongTxt +
+    '（帮身 ' + xj.bang.toFixed(1) + ' · 消耗 ' + xj.hao.toFixed(1) + '）。<br>' +
+    logic + '。五行之中，<b>' + xj.weakest + '</b> 最为薄弱，也可适当补之。';
+
+  /* 三件推荐 */
+  const dayPillar = result.pillars[2];
+  const seed = (dayPillar.gan || '') + (dayPillar.zhi || '') + xj.favor.join('');
+  const picks = matchStationery(xj, answers, seed);
+  let pk = '';
+  picks.forEach(function (p, i) {
+    const it = p.item;
+    const el = elClass(it.element);
+    let why = p.reasons.length ? p.reasons.join('，') : '综合五行与偏好，与你气场相合';
+    pk += '<div class="pick">';
+    pk += '  <div class="pick-rank">NO.' + (i + 1) + '</div>';
+    pk += '  <div class="pick-el ' + el + '">' + it.element + '</div>';
+    pk += '  <div class="pick-body">';
+    pk += '    <div class="pick-top">';
+    pk += '      <span class="pick-name">' + it.name + '</span>';
+    pk += '      <span class="pick-tag">' + it.type + '</span>';
+    pk += '    </div>';
+    pk += '    <div class="pick-desc">' + it.desc + '</div>';
+    pk += '    <div class="pick-why">' + why + '</div>';
+    pk += '  </div>';
+    pk += '</div>';
+  });
+  $('picks').innerHTML = pk;
+
+  show('screenResult');
+}
+
+function elClass(el) {
+  return { '木':'wood', '火':'fire', '土':'earth', '金':'metal', '水':'water' }[el] || 'wood';
+}
+
+
+/* ============================================================
+   PART 6 · 事件绑定
+   ============================================================ */
+
+$('btnStart').addEventListener('click', function () {
+  state.step = 0;
+  state.answers = [];
+  show('screenQuiz');
+  renderQuiz();
+});
+
+$('btnBackQuiz').addEventListener('click', function () {
+  state.step = QUIZ.length - 1;
+  show('screenQuiz');
+  renderQuiz();
+});
+
+$('btnCalc').addEventListener('click', function () {
+  const dateStr = $('birthDate').value;
+  if (!dateStr) { alert('请先选择出生日期'); return; }
+
+  const parts = dateStr.split('-');
+  const y = parseInt(parts[0], 10);
+  const m = parseInt(parts[1], 10);
+  const d = parseInt(parts[2], 10);
+
+  const hourVal = $('birthHour').value;
+  const hour = hourVal === '' ? null : parseInt(hourVal, 10);
+
+  /* 校验问卷完整性 */
+  if (state.answers.length !== QUIZ.length) {
+    alert('问卷还没答完，请返回补充');
+    return;
+  }
+
+  try {
+    const result = paipan(y, m, d, hour);
+    renderResult(result, state.answers);
+  } catch (err) {
+    console.error(err);
+    alert('排盘出错：' + err.message);
+  }
+});
+
+$('btnRestart').addEventListener('click', function () {
+  state.step = 0;
+  state.answers = [];
+  show('screenStart');
+});
+</script>
+
+</body>
+</html>
